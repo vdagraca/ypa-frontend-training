@@ -35,10 +35,10 @@ export async function getMovies(sortBy = 'ascending') {
   return await result.json()
 }
 
-// endpoint = 'search/movie'
-export async function searchMovies(query, sortBy = 'ascending') {
+// example url: https://api.themoviedb.org/3/search/movie?api_key=149a733ca73a71f9233c239e0607f92d&query=Avengers
+export async function searchMovies(query) {
   // construct the correct url
   const apiUrl = makeUrl()
 
-  // Fetch movies like above
+  // Fetch movies like above ^
 }

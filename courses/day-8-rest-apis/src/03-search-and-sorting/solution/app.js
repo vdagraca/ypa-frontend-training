@@ -43,10 +43,20 @@ export function ListItem({ movie }) {
   )
 }
 
+function sortMovies(movies, key, direction = 'desc') {
+  if (direction === 'desc') {
+    return movies.sort((a, b) => (a[key] < b[key] ? -1 : 1))
+  }
+  if (direction === 'asc') {
+    return movies.sort((a, b) => (a[key] < b[key] ? 1 : -1))
+  }
+  return movies
+}
+
 export function App() {
   const [movies, setMovies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
-  const [sortBy, setSortBy] = useState('popularity.desc')
+  const [sortBy, setSortBy] = useState('none')
   const [query, setQuery] = useState('')
   const [debouncedQuery] = useDebounce(query, 300)
 
@@ -61,7 +71,7 @@ export function App() {
     setIsLoading(false)
   }
 
-  const searchMovies = async (query, sortBy) => {
+  const searchMovies = async (query) => {
     setIsLoading(true)
 
     const { results } = await ApiClient.searchMovies(query, sortBy)
@@ -81,12 +91,42 @@ export function App() {
   useEffect(
     () => {
       if (debouncedQuery !== '') {
-        searchMovies(debouncedQuery, sortBy)
+        searchMovies(debouncedQuery)
       } else {
         fetchMovies() // restore original movies
       }
     },
-    [debouncedQuery, sortBy]
+    [debouncedQuery]
+  )
+
+  // Sort by change
+  useEffect(
+    () => {
+      setIsLoading(true)
+      let sortedMovies = []
+
+      switch (sortBy) {
+        case 'popularity.desc':
+          sortedMovies = sortMovies(movies, 'vote_average', 'desc')
+          break
+        case 'popularity.asc':
+          sortedMovies = sortMovies(movies, 'vote_average', 'asc')
+          break
+        case 'new.desc':
+          sortedMovies = sortMovies(movies, 'release_date', 'desc')
+          break
+        case 'new.asc':
+          sortedMovies = sortMovies(movies, 'release_date', 'asc')
+          break
+        default:
+          sortedMovies = movies
+      }
+
+      setMovies([])
+      setMovies(sortedMovies)
+      setIsLoading(false)
+    },
+    [sortBy]
   )
 
   return (
@@ -109,9 +149,17 @@ export function App() {
                   Search results for: <strong>"{debouncedQuery}"</strong>
                 </span>
 
-                <select name="sort-by" id="sort-by" onChange={(e) => setSortBy(e.target.value)}>
+                <select
+                  name="movies-sort-by"
+                  className="movies-sort-by"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                >
+                  <option value="none">Select sorting</option>
                   <option value="popularity.desc">Most popular</option>
                   <option value="popularity.asc">Least popular</option>
+                  <option value="new.desc">Newest</option>
+                  <option value="new.asc">Oldest</option>
                 </select>
               </div>
             )}
