@@ -9,7 +9,7 @@ body {
 }
 
 h1 {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   text-align: center;
   font-size: 3rem;
 }
@@ -61,7 +61,7 @@ h1 {
 
 .movie-search-input {
   display: block;
-  margin: 30px auto;
+  margin: 2rem auto 2rem;
   width: 80%;
   box-shadow: none;
   border: 2px solid #ccc;
@@ -76,15 +76,19 @@ h1 {
 }
 
 .movie-search-info {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 2rem;
+  padding: 0 1rem;
 }
 
 .movie-search-label {
-  font-weight: bold;
   font-size: 1.5rem;
 }
 
 .movie-search-no-results {
   text-align: center;
-  color: tomato;
+  color: #B09430;
+  margin-top: 3rem;
+  font-size: 1.5rem;
 }

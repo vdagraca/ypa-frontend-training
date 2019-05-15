@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import classnames from 'classnames'
 import { useDebounce } from 'use-debounce'
 import * as ApiClient from './api-client'
 import './app.css'
@@ -20,7 +21,7 @@ export function ListItem({ movie }) {
 
   return (
     <li
-      className={`movie-item${expanded ? ' _is_expanded' : ''}`}
+      className={classnames('movie-item', { _is_expanded: expanded })}
       onClick={() => setExpanded(!expanded)}
       role="button"
     >
@@ -40,6 +41,7 @@ export function ListItem({ movie }) {
 
 export function App() {
   const [movies, setMovies] = useState([])
+  const [sortBy, setSortBy] = useState('popularity.desc')
   const [query, setQuery] = useState('')
   const [debouncedQuery] = useDebounce(query, 300)
 
@@ -50,27 +52,29 @@ export function App() {
     }
   }
 
-  useEffect(
-    () => {
-      fetchMovies()
-    },
-    [debouncedQuery]
-  )
-
-  const searchMovies = async (query) => {
-    const { results } = await ApiClient.searchMovies(query)
+  const searchMovies = async (query, sortBy) => {
+    const { results } = await ApiClient.searchMovies(query, sortBy)
     if (results) {
       setMovies(results)
     }
   }
 
+  // Mount
+  useEffect(() => {
+    fetchMovies()
+  }, [])
+
+  // Query change
   useEffect(
     () => {
       if (debouncedQuery !== '') {
-        searchMovies(debouncedQuery)
+        console.log(sortBy)
+        searchMovies(debouncedQuery, sortBy)
+      } else {
+        fetchMovies() // restore original movies
       }
     },
-    [debouncedQuery]
+    [debouncedQuery, sortBy]
   )
 
   return (
@@ -82,11 +86,17 @@ export function App() {
         placeholder="Search for movies"
         onChange={(e) => setQuery(e.target.value)}
       />
-      <div className="movie-search-info">
-        {debouncedQuery !== '' && (
-          <span className="movie-search-label">Search results for: {debouncedQuery}</span>
+      {debouncedQuery !== '' &&
+        movies.length !== 0 && (
+          <div className="movie-search-info">
+            <span className="movie-search-label">Search results for: <strong>"{debouncedQuery}"</strong></span>
+
+            <select name="sort-by" id="sort-by" onChange={(e) => setSortBy(e.target.value)}>
+              <option value="popularity.desc">Most popular</option>
+              <option value="popularity.asc">Least popular</option>
+            </select>
+          </div>
         )}
-      </div>
       {movies.length === 0 && (
         <div className="movie-search-no-results">
           <h3>No results found for: {debouncedQuery}</h3>

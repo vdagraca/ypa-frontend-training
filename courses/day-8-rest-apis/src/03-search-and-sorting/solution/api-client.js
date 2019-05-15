@@ -36,7 +36,7 @@ export async function getMovies(sortBy = 'ascending') {
 }
 
 export async function searchMovies(query, sortBy = 'ascending') {
-  const apiUrl = makeUrl('search/movie', API_KEY, { query, sory_by: sortBy })
+  const apiUrl = makeUrl('search/movie', API_KEY, { query, sort_by: sortBy })
 
   const result = await fetch(apiUrl, {
     method: 'GET',
