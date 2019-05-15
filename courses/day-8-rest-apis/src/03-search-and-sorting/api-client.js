@@ -34,3 +34,11 @@ export async function getMovies(sortBy = 'ascending') {
 
   return await result.json()
 }
+
+// endpoint = 'search/movie'
+export async function searchMovies(query, sortBy = 'ascending') {
+  // construct the correct url
+  const apiUrl = makeUrl()
+
+  // Fetch movies like above
+}

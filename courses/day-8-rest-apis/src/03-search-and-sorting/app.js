@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useDebounce } from 'use-debounce'
 import * as ApiClient from './api-client'
 import './app.css'
 
@@ -8,6 +9,10 @@ function Container({ children }) {
 
 function List({ children }) {
   return <ul className="movie-list">{children}</ul>
+}
+
+function Loader() {
+  return <div className="loader" aria-hidden="true" />
 }
 
 function Image({ path, alt = '' }) {
@@ -39,15 +44,29 @@ export function ListItem({ movie }) {
 
 export function App() {
   const [movies, setMovies] = useState([])
+  const [query, setQuery] = useState('')
+  const [debouncedQuery] = useDebounce(query, 300)
 
-  useEffect(() => {
-    async function fetchMovies() {
-      const { results } = await ApiClient.getMovies('popularity.desc')
-      if (results && results.length) {
-        setMovies(results)
-      }
+  const fetchMovies = async () => {
+    const { results } = await ApiClient.getMovies('popularity.desc')
+    if (results && results.length) {
+      setMovies(results)
     }
+  }
+
+  const searchMovies =  async () => {
+    // TODO
+  }
+
+  // Mount
+  useEffect(() => {
     fetchMovies()
+  }, [])
+
+
+  // Query  change
+  useEffect(() => {
+    // TODO
   }, [])
 
   return (

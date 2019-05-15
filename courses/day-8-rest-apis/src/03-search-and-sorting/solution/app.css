@@ -1,5 +1,12 @@
+:root {
+  --color--primary: #1e7be2;
+  --color--background: #f1f1f1;
+  --color--text: #333;
+}
+
 body {
-  background-color: #f1f1f1;
+  background-color: var(--color--background);
+  color: var(--color--text);
 }
 
 .container {
@@ -12,6 +19,51 @@ h1 {
   margin-bottom: 2rem;
   text-align: center;
   font-size: 3rem;
+}
+
+.loader {
+  border-radius: 80%;
+  display: block;
+  height: 40px;
+  width: 40px;
+  position: relative;
+  animation: spin 0.675s linear 0s infinite normal;
+  background-color: transparent;
+  margin: 5rem auto 0;
+}
+
+.loader::before,
+.loader::after {
+  content: '';
+  display: block;
+  position: absolute;
+}
+
+.loader::before {
+  border-radius: 0 90px 90px 0;
+  height: 40px;
+  width: 50%;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  background: linear-gradient(var(--color--background), var(--color--primary));
+}
+
+.loader::after {
+  border-radius: 90px;
+  height: 30px;
+  width: 30px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  background-color: var(--color--background);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .movie-list {
@@ -72,7 +124,7 @@ h1 {
 
 .movie-search-input:focus {
   outline: none;
-  border-color: #1d74b3;
+  border-color: var(--color--primary);
 }
 
 .movie-search-info {
@@ -88,7 +140,6 @@ h1 {
 
 .movie-search-no-results {
   text-align: center;
-  color: #B09430;
   margin-top: 3rem;
   font-size: 1.5rem;
 }
