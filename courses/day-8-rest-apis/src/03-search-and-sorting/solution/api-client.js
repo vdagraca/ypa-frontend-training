@@ -34,3 +34,19 @@ export async function getMovies(sortBy = 'ascending') {
 
   return await result.json()
 }
+
+export async function searchMovies(query, sortBy = 'ascending') {
+  const apiUrl = makeUrl('search/movie', API_KEY, { query, sory_by: sortBy })
+
+  const result = await fetch(apiUrl, {
+    method: 'GET',
+    ...acceptJson,
+  })
+
+  if (!result.ok) {
+    console.error('Failed to fetch movies ', result)
+    return
+  }
+
+  return await result.json()
+}
