@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useDebounce } from 'use-debounce'
 import * as ApiClient from './api-client'
 import './app.css'
 
@@ -39,20 +40,58 @@ export function ListItem({ movie }) {
 
 export function App() {
   const [movies, setMovies] = useState([])
+  const [query, setQuery] = useState('')
+  const [debouncedQuery] = useDebounce(query, 300)
 
-  useEffect(() => {
-    async function fetchMovies() {
-      const { results } = await ApiClient.getMovies('popularity.desc')
-      if (results && results.length) {
-        setMovies(results)
-      }
+  const fetchMovies = async (sortBy = 'popularity.desc') => {
+    const { results } = await ApiClient.getMovies(sortBy)
+    if (results && results.length) {
+      setMovies(results)
     }
-    fetchMovies()
-  }, [])
+  }
+
+  useEffect(
+    () => {
+      fetchMovies()
+    },
+    [debouncedQuery]
+  )
+
+  const searchMovies = async (query) => {
+    const { results } = await ApiClient.searchMovies(query)
+    if (results) {
+      setMovies(results)
+    }
+  }
+
+  useEffect(
+    () => {
+      if (debouncedQuery !== '') {
+        searchMovies(debouncedQuery)
+      }
+    },
+    [debouncedQuery]
+  )
 
   return (
     <Container>
       <h1>My Movies</h1>
+      <input
+        type="search"
+        className="movie-search-input"
+        placeholder="Search for movies"
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      <div className="movie-search-info">
+        {debouncedQuery !== '' && (
+          <span className="movie-search-label">Search results for: {debouncedQuery}</span>
+        )}
+      </div>
+      {movies.length === 0 && (
+        <div className="movie-search-no-results">
+          <h3>No results found for: {debouncedQuery}</h3>
+        </div>
+      )}
       <List>{movies.map((movie) => <ListItem key={movie.id} movie={movie} />)}</List>
     </Container>
   )
