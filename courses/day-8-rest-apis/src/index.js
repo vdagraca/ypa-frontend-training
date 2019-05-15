@@ -2,6 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 
-import { App } from './02-display-movies/app'
+import { App } from './03-search-and-sorting/solution/app'
 
 ReactDOM.render(<App />, document.getElementById('root'))

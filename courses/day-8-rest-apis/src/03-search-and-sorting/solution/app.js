@@ -42,7 +42,7 @@ export function ListItem({ movie }) {
     </li>
   )
 }
-W
+
 export function App() {
   const [movies, setMovies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
