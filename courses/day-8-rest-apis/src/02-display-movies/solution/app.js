@@ -10,8 +10,8 @@ function List({ children }) {
   return <ul className="movie-list">{children}</ul>
 }
 
-function Image({ path, alt = '' }) {
-  return <img src={path} alt={alt} />
+function Image({ src, alt = '' }) {
+  return <img src={src} alt={alt} />
 }
 
 export function ListItem({ movie }) {
