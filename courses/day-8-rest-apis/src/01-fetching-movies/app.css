@@ -1,0 +1,38 @@
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: pink;
+    padding: 20px;
+}
+
+.movie-item_is_expanded {
+    display: block;
+    margin: 30px;
+}
+
+.movie-item {
+    display: none;
+    
+}
+
+.movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    
+}
+
+.list-item {
+    width: 300px;
+    margin: 30px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 50px;
+}
+
+.item-image {
+    width: 250px;
+    object-fit: cover;
+}
